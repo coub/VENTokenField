@@ -1,3 +1,4 @@
+
 // VENTokenField.m
 //
 // Copyright (c) 2014 Venmo
@@ -26,10 +27,10 @@
 #import "VENToken.h"
 #import "VENBackspaceTextField.h"
 
-static const CGFloat VENTokenFieldDefaultVerticalInset      = 7.0;
-static const CGFloat VENTokenFieldDefaultHorizontalInset    = 15.0;
-static const CGFloat VENTokenFieldDefaultToLabelPadding     = 5.0;
-static const CGFloat VENTokenFieldDefaultTokenPadding       = 2.0;
+static const CGFloat VENTokenFieldDefaultVerticalInset      = 10.0;
+static const CGFloat VENTokenFieldDefaultHorizontalInset    = 14.0;
+static const CGFloat VENTokenFieldDefaultToLabelPadding     = 8.0;
+static const CGFloat VENTokenFieldDefaultTokenPadding       = 6.0;
 static const CGFloat VENTokenFieldDefaultMinInputWidth      = 80.0;
 static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
 
@@ -61,6 +62,8 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
+    
     [self setUpInit];
 }
 
@@ -147,16 +150,6 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
     [self reloadData];
 }
 
-- (void)setColorScheme:(UIColor *)color
-{
-    _colorScheme = color;
-    self.collapsedLabel.textColor = color;
-    self.inputTextField.tintColor = color;
-    for (VENToken *token in self.tokens) {
-        [token setColorScheme:color];
-    }
-}
-
 - (void)setInputTextFieldAccessoryView:(UIView *)inputTextFieldAccessoryView
 {
     _inputTextFieldAccessoryView = inputTextFieldAccessoryView;
@@ -238,7 +231,6 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
 {
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))];
     self.scrollView.scrollsToTop = NO;
-    self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.frame) - self.horizontalInset * 2, CGRectGetHeight(self.frame) - self.verticalInset * 2);
     self.scrollView.contentInset = UIEdgeInsetsMake(self.verticalInset,
                                                     self.horizontalInset,
                                                     self.verticalInset,
@@ -269,7 +261,7 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
 - (void)layoutCollapsedLabelWithCurrentX:(CGFloat *)currentX
 {
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(*currentX, CGRectGetMinY(self.toLabel.frame), self.width - *currentX - self.horizontalInset, self.toLabel.height)];
-    label.font = [UIFont fontWithName:@"HelveticaNeue" size:15.5];
+    label.font = [UIFont systemFontOfSize:14.0];
     label.text = [self collapsedText];
     label.textColor = self.colorScheme;
     label.minimumScaleFactor = 5./label.font.pointSize;
@@ -307,8 +299,7 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
             [weakSelf didTapToken:weakToken];
         };
 
-        [token setTitleText:[NSString stringWithFormat:@"%@,", title]];
-        token.colorScheme = [self colorSchemeForTokenAtIndex:i];
+        [token setTitleText:[NSString stringWithFormat:@"%@", title]];
         
         [self.tokens addObject:token];
 
@@ -362,8 +353,8 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
     if (!_toLabel) {
         _toLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _toLabel.textColor = self.toLabelTextColor;
-        _toLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15.5];
-        _toLabel.x = 0;
+        _toLabel.font = [UIFont systemFontOfSize:14.0];
+        _toLabel.x = 0.0;
         [_toLabel sizeToFit];
         [_toLabel setHeight:[self heightForToken]];
     }
@@ -404,7 +395,7 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
         _inputTextField = [[VENBackspaceTextField alloc] init];
         [_inputTextField setKeyboardType:self.inputTextFieldKeyboardType];
         _inputTextField.textColor = self.inputTextFieldTextColor;
-        _inputTextField.font = [UIFont fontWithName:@"HelveticaNeue" size:15.5];
+        _inputTextField.font = [UIFont systemFontOfSize:15.0];
         _inputTextField.autocorrectionType = self.autocorrectionType;
         _inputTextField.autocapitalizationType = self.autocapitalizationType;
         _inputTextField.tintColor = self.colorScheme;
@@ -505,15 +496,6 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
     }
 }
 
-- (UIColor *)colorSchemeForTokenAtIndex:(NSUInteger)index {
-    
-    if ([self.dataSource respondsToSelector:@selector(tokenField:colorSchemeForTokenAtIndex:)]) {
-        return [self.dataSource tokenField:self colorSchemeForTokenAtIndex:index];
-    }
-    
-    return self.colorScheme;
-}
-
 #pragma mark - Data Source
 
 - (NSString *)titleForTokenAtIndex:(NSUInteger)index
@@ -606,3 +588,4 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
 }
 
 @end
+

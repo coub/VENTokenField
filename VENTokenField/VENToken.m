@@ -26,6 +26,12 @@
 @property (strong, nonatomic) UITapGestureRecognizer *tapGestureRecognizer;
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UIView *backgroundView;
+
+@property (strong, nonatomic) UIColor *backgroundViewColor;
+@property (strong, nonatomic) UIColor *backgroundViewColorHighlighted;
+@property (strong, nonatomic) UIColor *textColor;
+@property (strong, nonatomic) UIColor *textColorHighlighted;
+
 @end
 
 @implementation VENToken
@@ -42,40 +48,46 @@
 
 - (void)setUpInit
 {
-    self.backgroundView.layer.cornerRadius = 5;
+    self.backgroundView.layer.cornerRadius = 4.0;
     self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapToken:)];
-    self.colorScheme = [UIColor blueColor];
-    self.titleLabel.textColor = self.colorScheme;
+    
+    _textColor = [UIColor blackColor];
+    _textColorHighlighted = [UIColor blackColor];
+    _backgroundViewColor = [[UIColor alloc] initWithRed: 35.0/255.0 green: 135.0/255.0 blue: 251.0/255.0 alpha: 0.2];
+    _backgroundViewColorHighlighted = [[UIColor alloc] initWithRed: 35.0/255.0 green: 135.0/255.0 blue: 251.0/255.0 alpha: 0.6];
+    
+    _highlighted = false;
+    
+    [self configureView];
+    
     [self addGestureRecognizer:self.tapGestureRecognizer];
 }
 
 - (void)setTitleText:(NSString *)text
 {
     self.titleLabel.text = text;
-    self.titleLabel.textColor = self.colorScheme;
+    self.titleLabel.textColor = self.textColor;
     [self.titleLabel sizeToFit];
-    self.frame = CGRectMake(CGRectGetMinX(self.frame), CGRectGetMinY(self.frame), CGRectGetMaxX(self.titleLabel.frame) + 3, CGRectGetHeight(self.frame));
+    self.frame = CGRectMake(CGRectGetMinX(self.frame), CGRectGetMinY(self.frame), CGRectGetMaxX(self.titleLabel.frame) + 7.0, CGRectGetHeight(self.frame));
     [self.titleLabel sizeToFit];
 }
 
 - (void)setHighlighted:(BOOL)highlighted
 {
     _highlighted = highlighted;
-    UIColor *textColor = highlighted ? [UIColor whiteColor] : self.colorScheme;
-    UIColor *backgroundColor = highlighted ? self.colorScheme : [UIColor clearColor];
+    
+    [self configureView];
+}
+
+#pragma mark - Private
+
+- (void)configureView
+{
+    UIColor *textColor = self.highlighted ? self.textColorHighlighted : self.textColor;
+    UIColor *backgroundColor = self.highlighted ? self.backgroundViewColorHighlighted : self.backgroundViewColor;
     self.titleLabel.textColor = textColor;
     self.backgroundView.backgroundColor = backgroundColor;
 }
-
-- (void)setColorScheme:(UIColor *)colorScheme
-{
-    _colorScheme = colorScheme;
-    self.titleLabel.textColor = self.colorScheme;
-    [self setHighlighted:_highlighted];
-}
-
-
-#pragma mark - Private
 
 - (void)didTapToken:(UITapGestureRecognizer *)tapGestureRecognizer
 {

@@ -11,6 +11,7 @@
 
 @interface ViewController () <VENTokenFieldDelegate, VENTokenFieldDataSource>
 @property (weak, nonatomic) IBOutlet VENTokenField *tokenField;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tokenFieldHeight;
 @property (strong, nonatomic) NSMutableArray *names;
 @end
 
@@ -22,9 +23,9 @@
     self.names = [NSMutableArray array];
     self.tokenField.delegate = self;
     self.tokenField.dataSource = self;
-    self.tokenField.placeholderText = NSLocalizedString(@"Enter names here", nil);
-    self.tokenField.toLabelText = NSLocalizedString(@"Post to:", nil);
-    [self.tokenField setColorScheme:[UIColor colorWithRed:61/255.0f green:149/255.0f blue:206/255.0f alpha:1.0f]];
+    self.tokenField.placeholderText = @"";
+    self.tokenField.toLabelText = NSLocalizedString(@"To:", nil);
+    self.tokenField.toLabelTextColor = [UIColor blackColor];
     self.tokenField.delimiters = @[@",", @";", @"--"];
     [self.tokenField becomeFirstResponder];
 }
@@ -56,6 +57,11 @@
 
 
 #pragma mark - VENTokenFieldDataSource
+
+- (void)tokenField:(VENTokenField *)tokenField didChangeContentHeight:(CGFloat)height
+{
+    self.tokenFieldHeight.constant = height;
+}
 
 - (NSString *)tokenField:(VENTokenField *)tokenField titleForTokenAtIndex:(NSUInteger)index
 {
