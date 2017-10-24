@@ -161,6 +161,18 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
     return self.inputTextField.text;
 }
 
+- (void)setInputText:(NSString *)text
+{
+    NSRange range = NSMakeRange(0, _inputTextField.text.length);
+    if ([self textField:_inputTextField shouldChangeCharactersInRange:range replacementString:text]) {
+        _inputTextField.text = text;
+        if ([self.delegate respondsToSelector:@selector(tokenField:didEnterText:)]) {
+            if ([_inputTextField.text length]) {
+                [self.delegate tokenField:self didEnterText:_inputTextField.text];
+            }
+        }
+    }
+}
 
 #pragma mark - View Layout
 
@@ -530,12 +542,6 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if ([self.delegate respondsToSelector:@selector(tokenField:didEnterText:)]) {
-        if ([textField.text length]) {
-            [self.delegate tokenField:self didEnterText:textField.text];
-        }
-    }
-    
     return NO;
 }
 

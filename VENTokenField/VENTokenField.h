@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)reloadData;
 - (void)collapse;
 - (nullable NSString *)inputText;
-
+- (void)setInputText:(NSString *)text;
 
 /**-----------------------------------------------------------------------------
  * @name Customization
