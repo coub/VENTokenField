@@ -33,6 +33,7 @@ static const CGFloat VENTokenFieldDefaultToLabelPadding     = 8.0;
 static const CGFloat VENTokenFieldDefaultTokenPadding       = 6.0;
 static const CGFloat VENTokenFieldDefaultMinInputWidth      = 80.0;
 static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
+static const NSInteger VENTokenFieldUnlimitedTokenCount     = 0;
 
 
 @interface VENTokenField () <VENBackspaceTextFieldDelegate>
@@ -98,6 +99,7 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
     self.colorScheme = [UIColor blueColor];
     self.toLabelTextColor = [UIColor colorWithRed:112/255.0f green:124/255.0f blue:124/255.0f alpha:1.0f];
     self.inputTextFieldTextColor = [UIColor colorWithRed:38/255.0f green:39/255.0f blue:41/255.0f alpha:1.0f];
+    self.maxTokenCount = VENTokenFieldUnlimitedTokenCount;
     
     // Accessing bare value to avoid kicking off a premature layout run.
     _toLabelText = NSLocalizedString(@"To:", nil);
@@ -539,6 +541,11 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
 
 
 #pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    return (self.maxTokenCount == VENTokenFieldUnlimitedTokenCount || self.tokens.count < self.maxTokenCount);
+}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {

@@ -79,6 +79,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (copy, nonatomic, nullable) NSString *placeholderText;
 @property (copy, nonatomic, nullable) NSString *inputTextFieldAccessibilityLabel;
 
+@property (assign, nonatomic) NSInteger maxTokenCount;
+
 @end
 
 NS_ASSUME_NONNULL_END
